@@ -1,5 +1,6 @@
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Scanner;
 
 class Test{
     public static void main(String[] args ) throws UnsupportedEncodingException
@@ -29,7 +30,6 @@ class Ifsample {
 class BoolTest {
     public static void main(String args[]) {
         boolean b;
-		
 		
         b = false;
         System.out.println("b = " + b);
@@ -120,5 +120,26 @@ class InfiniteSumDoWhile {
         } while (x <= maxIterations);
 
         System.out.println("Приближённая сумма ряда: " + sum);
+    }
+}
+
+
+class SumMultiplesOfFive {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+		System.out.print("Введите количество чисел: ");
+        int count = scanner.nextInt();
+        int sum = 0;
+        
+        System.out.println("Введите числа:");
+        for (int i = 0; i < count; i++) {
+            int number = scanner.nextInt();
+            if (number % 5 == 0) {
+                sum += number;
+            }
+        }
+
+        System.out.println("Сумма чисел, кратных 5: " + sum);
+        scanner.close();
     }
 }
