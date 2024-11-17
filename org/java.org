@@ -1,9 +1,8 @@
 #+STARTUP: showall
-
 * Введение
 JDK(java development kit) - бесплатный набор инструментов от компании Oracle упрощающих
 разработку приложений Java.
-	К числу иструметов входят комрилятор(javac), архиватор(jar), и генератор документации для
+К числу иструметов входят комрилятор(javac), архиватор(jar), и генератор документации для
 построения документации в формате HTML на основе кода Java (javadoc)
 
 Команда package она сообщает компилятору что файл Java который вы создли является частью пакета
@@ -13,6 +12,8 @@ JDK(java development kit) - бесплатный набор инструмент
 в начало своего файла, вы тем самым приказываете компилятору влючить этот файл в пакет (название)
 Компилятор создает папку с именем (название) и сохраняет в этой папке файлы , принадлежащие этому
 пакету, хранятся в одной папке.
+
+[[file:/home/dima/Docs/org/pic/jdk.png]]
 
 * Типы данных
 
@@ -51,6 +52,78 @@ JDK(java development kit) - бесплатный набор инструмент
 *boolean* — специальный тип данных, который может использоваться для хранения только двух значений:
 true и false. Чаще всего тип boolean используется в управляющих командах.
 
+** Костанты
+Константы - это переменные, значение которых не долно измениться во время работы программы.
+При объявлении константы перед типом данных указывается ключевое слово *final*
+
+final int NUMBER_CONST = 10;
+
+В названии константы принято использовать буквы только в верхнем регистр. Если название состоит из
+нескольки слов между словами ставится символ подчеркивания.
+
+** Статические переменные и константы класса
+Если необходимо получить доступ к переменной из разных методов, то следует объявить переменную
+внутри блока класса, вне блоков методов. Чтобы переменную можно было использовать без создания экземпляра
+класса, перед типом данных следует указать ключевое слово *static*.
+
+static int x,y = 10;
+
+Если необходимо, чтобы значение переменной нельзя было менять внутри класса, то ее следует объявить как константу.
+Для этого после ключевого слова static указывается слово final. При объявлении статической константы класса необходимо
+присвоить ей некоторое значение. Пример объявления и инициализации константы класса:
+
+static final int MY_CONST = 50;
+
+Получить доступ к статической переменной и константе можно либо как обычно, либо указав перед именем переменной
+название класса через оператор «точка»:
+x = 10;
+MyClass.x = 88;
+
+Пример использования статической переменной и константы класса:
+
+#+begin_src java
+  public class MyClass {
+	  static int x; // объявление статической переменной
+	  static final int MY_CONST = 50; // объявление статической константы
+
+	  public static void main(String[] args) {
+		  System.out.println(x);
+		  x = 10;
+		  System.out.println(x);
+		  MyClass.x = 88;
+		  System.out.println(x);
+		  System.out.println(MyClass.x);
+		  System.out.println(MY_CONST);
+		  System.out.println(MyClass.MY_CONST);
+	  }
+  }
+#+end_src
+
+** Области видимости переменных
+*Глобальные переменные* - это переменные, которые объявлены в программе вне методов в блоке класса.
+*Локальные перменные* - это переменные, которые объявлены внутри метода. Локальные переменные видны только
+внутри метода или вложенного блока.
+*Локальные перменные внутри блока* - это переменные которые объявлены внутри метода в неименованном
+блоке и во вложенных блоках. Инициализация таких перменных производится при каждом входе в блок.
+#+begin_src java
+  public class Programm {
+	  static int x; // Глобальная перменная
+
+	  public static void main(String[] args) {
+		  x = 10;
+		  System.out.println(x); // 10
+		  func(); // вызов метода func()
+		  System.out.println(x); // 88
+	  }
+	  public static void func() {
+		  int x = 30; // Локальная переменная
+		  System.out.println(x); // 30
+		  System.out.println(Programm.x); // 10
+		  Programm.x = 88; 
+	  }
+  }
+#+end_src
+
 * Преобразование типов
 #+begin_src java
   short age = 10;
@@ -63,6 +136,30 @@ true и false. Чаще всего тип boolean используется в у
 преобразование может привести к потере данных. При преобразовании значения 20.9 в int будет получен
 результат 20, а не 21. Дробная часть пропадает после преобразования.
 
+* Перечисления
+Перечисление - это совокупность констант, описывающих все допустимые значения перменной. Если пеменной
+присвоить значение, не совподающее с перечисленными ри объявлении костантами, то компилятор выведет
+сообщение об ошибке.
+Пример использования перечисление:
+#+begin_src java
+  public class Programm {
+	  public static void main(String[] args) {
+		  Color color1,color2; // объявление переменной
+		  color1 = Color.RED;
+		  color2 = Color.BLACK;
+		  if (color == Color.RED) {
+			  System.out.println("color == RED");
+		  }
+		  if (color1 != color2) {
+			  System.out.println("color != color2");
+		  }
+		  System.out.printl(color1); // Выведет RED
+	  }
+  }
+
+  //Объявление перечисления
+  enum Color { RED, BLUE, GREEN, BLACK };
+#+end_src
 * Тип String
 
 #+begin_src java
@@ -183,7 +280,7 @@ import java.util.Arrays;
 	  import java.util.Arrays;
 
 	  public class HelloWorld {
-		  int [] source = {12, 1, 5, -2, 16, 14, 18, 20, 25}; // Имеется следующий массив
+		  int[] source = {12, 1, 5, -2, 16, 14, 18, 20, 25}; // Имеется следующий массив
 		  //Содержимое source можно скопировать в новый массив dest следующей командой:
 		  int[] dest = Arrays.copyOfRange(source, 3, 7);
 	  }
@@ -213,7 +310,7 @@ import java.util.Arrays;
   import java.util.Arrays;
 
   public class HelloWorld {
-	  int [] numbers2 = {12, 1, 5, -2, 16, 14}; // Имеется массив
+	  int[] numbers2 = {12, 1, 5, -2, 16, 14}; // Имеется массив
 	  //Чтобы его отсортировать нужно выполнить следующее
 	  Arrays.sort(numbers2); // Массив будет отсортирован по возрастанию
 	  System.out.println(Arrays.toString(numbers2)); //Для вывода отсортированного массива
@@ -244,9 +341,438 @@ import java.util.Arrays;
 
 Для получения длины массива не нужно добавлять круглые скобки после слова length.
 #+begin_src java
-  int [] userAge = {21, 22, 26, 32, 40};
+  int[] userAge = {21, 22, 26, 32, 40};
   int size = userAge.length; // size = 5 так как массив содержит 5 чисел
 #+end_src
 
 * Примитивные типы и ссылочные типы
+Все типы данных в Java делятся а римитивные и ссылочные.
+В Java Существует 8 примитивных типов (byte, short, int, long, float, double , char, boolean)
+Остальные типы являются ссылочными.
+К ссылочным типам принадлежат строки и массивы, классы и интерфейсы.
+Одно из главных различий между примитивными и ссылочными типами связано с тем, какие данные хранятся в памяти
 
+#+begin_src java
+  class Programm {
+	  public static void main(String[] argc){
+		  int myNumber = 5; //Примитивный тип хранит собственные данные
+		  //Пример ссылочного типа является String
+		  String message = "Hello";
+	  }
+  }
+#+end_src
+В перменной message не сохранятся строка "Hello". Вместо этого строка "Hello" Создается в другом месте памяти
+компьютера. В переменной message сохранятся адресс этого блока памяти.
+
+* Cтроки и неизменяемость
+Неизменяемость означает что значение строки не может быть изменено. Каждый раз когда вы объновляете
+переменную String на самом деле вы создаете новую строку и присваиваете ее адрес в памяти. Переменной String
+#+begin_src java
+  class Programm {
+	  public static void main(String[] argc) {
+		  String message = "Hello"; // В переменной message сохраняется адресс этого блока памяти
+		  message = "World"; // Создает новую строку и сохраняет в другом месте 
+	  }
+  }
+#+end_src
+Иначе говоря в памяти теперь хранится две строки "Hello" и "World". В message хранится адрес «World».
+Если строка «Hello» в программе более не используется, она будет со временем уничтожена, чтобы освободить
+эту область памяти. Этот процесс, называемый уборкой мусора, автоматически предоставляется Java.
+
+* Операторы вывода
+Чтобы пользоватся операторами print() или println(). необходимо поставить System.out перед именем метода
+Это необходимо из-за того, что два метода принадлежат классу PrintStream и для обращение к ним необходимо
+наличие префикса System.out
+Пример:
+#+begin_src java
+  class Programm {
+	  public static void main(String[] argc) {
+		  System.out.println("Hi, my name is Dima."); // Out String
+		  int number = 30;
+		  System.out.println(number); // Out number variable
+		  System.out.println(30+5); // out result 35
+
+		  // Конкатенации
+		  System.out.println("Hello, " + "how are you?" + " I love Java.");
+
+		  // Конкатенации строк со значениями
+		  int result = 37;
+		  System.out.println("You scored " + result + " marks for your test.");
+
+		  //Cтроки можно объединять с результатами математических выражений
+		  System.out.println("The sum of 50 and 2 is " + (50 + 2) + "."); // Скобки (50+2) нужны для того чтобы
+		  //компилятор вычислил выражение до того как объединять результат с двумя другими подстроками.
+	  }
+  }
+#+end_src
+
+* Форматирование вывода
+В предыдущих примерах было показано, как выводить данные методами println() и print(). Тем не менее иногда
+требуется более точно управлять форматом выходных данных.
+#+begin_src java
+  class Programm {
+	  public static void main(String[] argc) {
+		  System.out.println("The answer for 5.45 divided by 3 is " + (5.45/3));
+		  //будет выведено: The answer for 5.45 divided by 3 is 1.8166666666666667
+
+		  //Чтобы отформатировать приведённой выше результат, можно использовать следующее
+		  System.out.printf("The answer for %.3f divided by %d is %.2f.", 5.45, 3, 5.45/3);
+		  //Результат: The answer for 5.450 divided by 3 is 1.82.
+	  }
+  }
+#+end_src
+
+*Преобразователи:*
+#+begin_src java
+  class Programm {
+	  public static void main(String[] argc) {
+		  //Целочисленный преобразователь d
+		  System.out.printf("%d", 12);
+		  //Преобразователь новой строки n
+		  System.out.printf("%d%n%d", 12, 3);
+		  //Этот флаг используется для определения ширины вывода.
+		  System.out.printf("%8d", 12); // В этом примере перед числом 12 выводится 6 пробелов, чтобы общая ширина вывода была равна 8.
+		  //Флаг разделителя групп разрядов (,)
+		  System.out.printf("%,d", 12345); // result = 12,345
+		  System.out.printf("%,.2f", 12345.56789); // result = 12,345.57
+
+	  }
+  }
+#+end_src
+
+* Получение ввода от пользователя
+Получение ввода происходит несколько тривиально. Это можно сделать несколькими способами, но самый простой и
+распространенный основам на использовании объекта Scanner.
+
+Чтобы получить данные от пользователя, необходимо сначала импортировать класс Scanner следующей командой:
+*import java.util.Scanner*
+
+Затем нужно создать объект Scanner и передать System.in в аргументе
+System.in сообщает компилятору, что вы собираетесь получать ввод со стандартного устройства ввода, которым
+обычно является клавиатура
+
+Scanner reader = new Scanner(System.in);
+
+Класс Scanner содержит несколько методов, которые могут использоватся для чтения ввода от пользователя.
+#+begin_src java
+  package inputdemo;
+  import java.util.Scanner;
+
+  public class InputDemo {
+	  public static void main(String[] args) {
+		  Scanner input = new Scanner(System.in);
+
+		  System.out.print("Enter an integer: ");
+		  int myInt = input.nextInt();
+		  System.out.printf("You entered %d.%n%n", myInt);
+
+		  System.out.print("Enter a double: ");
+		  double myDouble = input.nextDouble();
+		  System.out.printf("You entered %.2f.%n%n", myDouble);
+
+		  System.out.print("Enter a string: ");
+		  input.nextLine();
+		  String myString = input.nextLine();
+		  System.out.printf("You entered %s.%n%n", myString);
+	  }
+  }
+#+end_src
+
+* Операторы сравнивания
+1) Не равно (!=) Возвращает true, если левая часть не равна правой.
+2) Больше (>) Возвращает true, если левая часть больше правой.
+3) Меньше (<) Возвращает true, если левая часть меньше правой.
+4) Меньше или равно (<=) Возвращает true , если левая часть меньше или равна правой.
+
+Также существуют два логических оператора (&&, ||), которые пригодятся для объединения нескольких условий.
+1) Оператор AND (&&) Возвращает true, если выполняются все условия.
+2) Оператор OR (||) Возвращает true, если выполняется хотя бы одно условие.
+   
+* Побитовые операторы
+1. *~ — двоичная инверсияx*. Значение каждого бита заменяется противоположным: int x = 100;
+     System.out.printf("%32s\n", Integer.toBinaryString(x));
+     // 1100100
+	 x = ~x;
+	 System.out.printf("%32s\n", Integer.toBinaryString(x));
+	 // 11111111111111111111111110011011
+2. *& — двоичное И*: int x = 100, y = 75;
+     int z = x & y;
+     System.out.printf("%32s\n", Integer.toBinaryString(x));
+     // 1100100
+	 System.out.printf("%32s\n", Integer.toBinaryString(y));
+	 // 1001011
+	 System.out.printf("%32s\n", Integer.toBinaryString(z));
+	 // 1000000
+3. *| — двоичное ИЛИ*: int x = 100, y = 75;
+     int z = x | y;
+	 System.out.printf("%32s\n", Integer.toBinaryString(x));
+	 // 1100100
+	 System.out.printf("%32s\n", Integer.toBinaryString(y));
+	 // 1001011
+	 System.out.printf("%32s\n", Integer.toBinaryString(z));
+	 // 1101111
+4. *^ — двоичное исключающее ИЛИ*: int x = 100, y = 250;
+     int z = x ^ y;
+	 System.out.printf("%32s\n", Integer.toBinaryString(x));
+	 // 1100100
+	 System.out.printf("%32s\n", Integer.toBinaryString(y));
+	 // 11111010
+	 System.out.printf("%32s\n", Integer.toBinaryString(z));
+	 // 10011110
+5. *<< — сдвиг влево*. Сдвигает двоичное представление числа влево на один или более
+     разрядов и заполняет разряды справа нулями:
+	 int x = 100;
+	 System.out.printf("%32s\n", Integer.toBinaryString(x));
+	 // 1100100
+	 x = x << 1;
+	 System.out.printf("%32s\n", Integer.toBinaryString(x));
+	 // 11001000
+	 x = x << 1;
+	 System.out.printf("%32s\n", Integer.toBinaryString(x));
+	 // 110010000
+	 x = x << 2;
+	 System.out.printf("%32s\n", Integer.toBinaryString(x));
+	 // 11001000000
+6. *>> — сдвиг вправо*. Сдвигает двоичное представление числа вправо на один или более
+     разрядов и заполняет разряды слева нулями, если число положительное:
+	 int x = 100;
+	 System.out.printf("%32s\n", Integer.toBinaryString(x));
+	 // 1100100
+	 x = x >> 1;
+	 System.out.printf("%32s\n", Integer.toBinaryString(x));
+	 // 110010
+	 x = x >> 1;
+	 System.out.printf("%32s\n", Integer.toBinaryString(x));
+	 // 11001
+	 x = x >> 2;
+	 System.out.printf("%32s\n", Integer.toBinaryString(x));
+	 // 110
+Если число отрицательное, то разряды слева заполняются единицами: int x = -127;
+     System.out.printf("%32s\n", Integer.toBinaryString(x));
+	 // 11111111111111111111111110000001
+	 x = x >> 1;
+	 System.out.printf("%32s\n", Integer.toBinaryString(x));
+	 // 11111111111111111111111111000000
+	 x = x >> 1;
+	 System.out.printf("%32s\n", Integer.toBinaryString(x));
+	 // 11111111111111111111111111100000
+	 x = x >> 2;
+	 System.out.printf("%32s\n", Integer.toBinaryString(x));
+	 // 11111111111111111111111111111000
+7. *>>> — сдвиг вправо*. Сдвигает двоичное представление числа вправо на один
+     или более разрядов и заполняет разряды слева нулями, даже если число отрицательное:
+	 int x = -127;
+	 System.out.printf("%32s\n", Integer.toBinaryString(x));
+	 // 11111111111111111111111110000001
+	 x = x >>> 1;
+	 System.out.printf("%32s\n", Integer.toBinaryString(x));
+	 // 1111111111111111111111111000000
+	 x = x >>> 8;
+	 System.out.printf("%32s\n", Integer.toBinaryString(x));
+	 // 11111111111111111111111
+
+Примеры установки, снятия и проверки установки флага:
+#+begin_src java
+  public class MyClass {
+	  public static void main(String[] args) {
+		  final byte FLAG1 = 1, FLAG2 = 2, FLAG3 = 4, FLAG4 = 8
+			  FLAG5 = 16, FLAG6 = 32, FLAG7 = 64;
+		  byte x = 0; // все флаги сброшены
+		  // Устанавливаем флаги FLAG1 | FLAG7
+		  x = (byte) (x | FLAG1 | FLAG7);
+		  System.out.println(Integer.toBinaryString(x)); //1000001
+		  x = (byte)(x | FLAG4 | FLAG5);
+		  System.out.println(Integer.toBinaryString(x)); // 1011001
+		  // Снимаем флаги FLAG4 и FLAG5
+		  x = (byte)(x ^ FLAG4 ^ FLAG5);
+		  System.out.println(Integer.toBinaryString(x)); // 1000001
+		  // Проверка установки флага FLAG1
+		  if ((x & FLAG1) != 0) {
+			  System.out.println("FLAG1 установлен");
+		  }
+	  }
+  }
+#+end_src
+
+#+begin_src java
+  public class MyClass {
+	  public static void main(String[] args) {
+		  int x = 0b1011001;
+		  int n = 0; // index bit
+		  while (x != 0) {
+			  if ((x & 1) != 0) { // Проверка статуса последнего бита
+				  System.out.println(n + "установлен");
+			  }
+			  else {
+				  System.out.println(n + " сброшен");
+			  }
+			  x = x >>> 1; // Сдвиг на один разряд вправо
+			  n++;
+		  }
+	  }
+  }
+#+end_src
+
+* Команды принятия решений
+** Команда if — одна из наиболее часто используемых команд управления последовательностью выполнения.
+Она позволяет программе проверить некоторое условие и выполнить соответствующее действие в зависимости
+от результата проверки.
+#+begin_src java
+  package ifdemo;
+  import java.util.Scanner;
+  
+  public class IfDemo {
+	  public static void main(String[] arg)
+	  {
+		  Scanner input = new Scanner(System.in);
+		  System.out.print("\nPlease enter your age: ");
+		  int userAge = input.nextInt();
+		  if (userAge < 0 || userAge > 100) {
+			  System.out.println("Invalid Age");
+			  System.out.println("Age must be between 0 and 100");
+		  }
+		  else if (userAge < 18)
+			  System.out.println("Sorry you are underage");
+		  else if (userAge < 21)
+			  System.out.println("You need parental consent");
+		  else {
+			  System.out.println("Congratulations!");
+			  System.out.println("You may sign up for the event!");
+		  }
+	  }
+  }
+#+end_src
+
+** Тернарный оператор
+Тернарный оператор (?) представляет собой упрощенную форму команды if, которая очень удобна для присваивания
+значения переменной в зависимости от результата условия. Синтаксис выглядит так:
+*условие ? значение для true : значение для false;*
+int 3 > 2 ? 10 : 5;
+int myNum = 3>2 ? 10 : 5;
+myNum будет присвоено значение 10.
+
+** Команда Switch
+Команда switch похожа на команду if, не считая того, что она не работает с диапазонами значений. Команда switch требует,
+чтобы каждый случай базировался на одном значении.
+
+* Обработка исключения
+Теперь необходимо понять как упровлять последовательностью выполнения программы при возникновении ошибки.
+Такая ситуация называется обработкой исключений.
+
+Если вы пологаете что некоторый блок кода может вызвать ошибку, попробуйте обработать ее в
+*try-catch-fnally*
+
+Синтаксис:
+try
+{
+   действия
+}
+catch (тип ошибки)
+{
+   действия при возникновении ошибки
+}
+finally
+{
+   выполняется независимо от того, было ли выполнено
+   условие try или catch.
+}
+
+#+begin_src java
+  package errordemo;
+  import java.util.Scanner;
+
+  public class ErrorDemo {
+	  public static void main(String[] args) {
+
+		  int num, deno;
+		  Scanner input = new Scanner(System.in);
+		  try
+		  {
+			  System.out.print("Please enter the numerator: ");
+			  num = input.nextInt();
+			  System.out.print("Please enter the denominator: ");
+			  deno = input.nextInt();
+
+			  System.out.println("The result is " + num/deno);
+		  }
+		  catch (Exception e) // Exception это класс а "e" это имя присвоенное ошибке
+		  {
+			  System.out.println(e.getMessage());
+		  }
+		  finally
+		  {
+			  System.out.println("---- End of Error Handling Example ----");
+		  }
+	  }
+  }
+#+end_src
+Exception — один из предварительно написанных классов в Java. Он обрабатывает все обобщенные ошибки и содержит
+метод с именем getMessage(), который возвращает описание причины исключения. Чтобы вывести сообщение
+об ошибке, используйте команду.
+System.out.println(e.getMessage());
+
+** Выдача исключений
+Например, ошибка ArrayIndexOutOfBoundsException перехватывается тогда, когда пользователь пытается обратиться
+к элементу, индекс которого выходит за границы массива. В этом примере это происходит тогда, когда пользователь
+вводит отрицательное или положительное число, большее 5.
+
+* ООП
+Объектно-ориентированное программирование - методология программирования, котороая разбивает задачу программирования
+на объекты, взаимодействующих друг с другом.
+
+Объекты создаются на основе шаблонов, называемых классами. Класс можно сравнить с чертежём детали. Объект становится
+деталью, котороя будет изготовлена по чертежу.
+
+** Написание собственных классов
+Синтаксис объявления класса:
+#+begin_src java
+  AccessModifer class ClassName {
+	  // Содержимое класса
+	  // с полями, конструкторами и методами
+  }
+
+  public class ManagementStaff {
+	  
+  }
+#+end_src
+Сначала указывается уровень доступа класса для чего используется модификатор доступа.
+Модификаторы управляют тем, могут ли другие классы использовать некоторое поле или метод класса.
+
+** Поля классов
+Чтобы добавить поля в класс их нужно просто записать в фигурных скобках класса
+#+begin_src java
+  public class Staff {
+	  private String nameOfStaff; // Поле класса 
+	  private final int hourlyRate = 30; // Поле класса
+	  private int hoursWorked; // Поле класса
+  }
+#+end_src
+Поле — переменная, объявленная внутри класса.
+Поле может быть объявлено как приватное (private), открытое (public) или защищенное (protected ). Если уровень
+доступа для компонента класса не указан, то он по умолчанию считается пакетным.
+
+**  
+* Преждевременное завершение программы
+В некоторых случаях может возникнуть условие, при котором дальнейшее выполнение программы лишено смысла.
+Для этого предназначени метод exit() из класса System
+Формат метода:
+#+begin_src java
+  public static void exit(int status); // format
+
+  import java.util.Scanner;
+  public class MyClass {
+	  public static void main(String[] args) {
+		  Scanner in = new Scanner(System.in);
+		  int x = 0, y = 0;
+		  System.out.print("x = ");
+		  x = in.nextInt();
+		  System.out.print("y = ");
+		  y = in.nextInt();
+		  if (y == 0) {
+			  System.out.println(Нельзя делить на 0);
+			  System.exit(1); // Завершение выполнение программы
+		  }
+		  System.out.printn("Результат деления = " + (x / y));
+	  }
+  }
+#+end_src
