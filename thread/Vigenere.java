@@ -1,3 +1,5 @@
+package thread;
+
 public class Vigenere {
     private final int[] keyShifts;
 
@@ -63,12 +65,12 @@ public class Vigenere {
 
     public static void main(String[] args) {
         // Создаем несколько экземпляров шифратора
-        Vigenere cipher1 = new Vigenere("LEMON");
+        Vigenere cipher1 = new Vigenere("DIMA");
         Vigenere cipher2 = new Vigenere("JAVA");
         Vigenere cipher3 = new Vigenere("THREAD");
 
         // Создаем потоки
-        Thread thread1 = new Thread(new CipherTask(cipher1, "ATTACKATDAWN", true), "Thread-1");
+        Thread thread1 = new Thread(new CipherTask(cipher1, "DUBNOVITSKIY", true), "Thread-1");
         Thread thread2 = new Thread(new CipherTask(cipher2, "HELLOWORLD", true), "Thread-2");
         Thread thread3 = new Thread(new CipherTask(cipher3, "MULTITHREADING", true), "Thread-3");
 		thread3.setPriority(Thread.MAX_PRIORITY);

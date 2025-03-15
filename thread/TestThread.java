@@ -1,8 +1,14 @@
 class TestThread {
     public static void main(String[] args) {
 		MyThread myThread = new MyThread();
+		if (myThread.isAlive()) System.out.println("Active");
+		else System.out.println("No Active");
+		
 		myThread.start();
 
+		if (myThread.isAlive()) System.out.println("Active");
+		else System.out.println("No active");
+		
 		System.out.println("Hello from main thread");
 	}
 }
