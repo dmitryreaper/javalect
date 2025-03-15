@@ -1,5 +1,7 @@
 package thread;
 
+import java.util.Scanner;
+
 public class Vigenere {
     private final int[] keyShifts;
 
@@ -46,6 +48,7 @@ public class Vigenere {
 
     // Вложенный класс для многопоточных задач
     private static class CipherTask implements Runnable {
+
         private final Vigenere cipher;
         private final String text;
         private final boolean encrypt;
@@ -65,27 +68,44 @@ public class Vigenere {
 
     public static void main(String[] args) {
         // Создаем несколько экземпляров шифратора
-        Vigenere cipher1 = new Vigenere("DIMA");
-        Vigenere cipher2 = new Vigenere("JAVA");
-        Vigenere cipher3 = new Vigenere("THREAD");
+        Vigenere cipher1 = new Vigenere("money");
+        Vigenere cipher2 = new Vigenere("java");
+        Vigenere cipher3 = new Vigenere("true");
 
-        // Создаем потоки
-        Thread thread1 = new Thread(new CipherTask(cipher1, "DUBNOVITSKIY", true), "Thread-1");
-        Thread thread2 = new Thread(new CipherTask(cipher2, "HELLOWORLD", true), "Thread-2");
-        Thread thread3 = new Thread(new CipherTask(cipher3, "MULTITHREADING", true), "Thread-3");
-		thread3.setPriority(Thread.MAX_PRIORITY);
-		
-        // Запускаем потоки
-        thread1.start();
+		Scanner input = new Scanner(System.in);
+		System.out.print("Введите первое слово которое нужно зашифровать: ");
+        Thread thread1 = new Thread(new CipherTask(cipher1, input.next(), true), "Thread-1");
+		System.out.print("Введите второе слово которое нужно зашифровать: ");
+        Thread thread2 = new Thread(new CipherTask(cipher2, input.next(), true), "Thread-2");
+		System.out.print("Введите третье слово которое нужно зашифровать: ");		
+        Thread thread3 = new Thread(new CipherTask(cipher3, input.next(), true), "Thread-3");
+
+		thread1.start();
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			System.out.println("Прерывание: " + e.getMessage());
+		}
         thread2.start();
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			System.out.println("Прерывание: " + e.getMessage());
+		}		
         thread3.start();
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			System.out.println("Прерывание: " + e.getMessage());
+		}
 
-        // Для демонстрации дешифрования
         try {
             thread1.join();
-            new Thread(new CipherTask(cipher1, "LXFOPVEFRNHR", false), "Decrypt-1").start();
+			System.out.print("Введите значения для дешифровки первого предложения: ");
+            new Thread(new CipherTask(cipher1, input.next(), false), "Decrypt-1").start();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+		input.close();
     }
 }
