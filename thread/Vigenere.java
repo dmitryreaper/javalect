@@ -3,8 +3,8 @@ package thread;
 import java.util.Scanner;
 
 public class Vigenere {
-    private final int[] keyShifts;
 
+    private final int[] keyShifts;
     // Конструктор принимает ключевое слово
     public Vigenere(String key) {
         this.keyShifts = new int[key.length()];
@@ -79,7 +79,10 @@ public class Vigenere {
         Thread thread2 = new Thread(new CipherTask(cipher2, input.next(), true), "Thread-2");
 		System.out.print("Введите третье слово которое нужно зашифровать: ");		
         Thread thread3 = new Thread(new CipherTask(cipher3, input.next(), true), "Thread-3");
-
+		thread1.setPriority(Thread.MAX_PRIORITY);
+		thread2.setPriority(Thread.MIN_PRIORITY);		
+		thread3.setPriority(Thread.NORM_PRIORITY);
+		
 		thread1.start();
 		try {
 			Thread.sleep(100);
