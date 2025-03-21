@@ -1,4 +1,3 @@
-#+STARTUP: showall
 * Введение
 JDK(java development kit) - бесплатный набор инструментов от компании Oracle упрощающих
 разработку приложений Java.
@@ -776,3 +775,153 @@ System.out.println(e.getMessage());
 	  }
   }
 #+end_src
+* Потоки и методы для работы с потоками
+** Метод join()
+#+begin_src java :result output
+  public class ClassName {
+	  public static void main(String[] args) {
+		  System.out.println("Main > ");
+		  Thread t = new Thread("MyThread");
+		  t.start();
+		  try {
+			  t.join();
+		  } catch (Exception e) {
+			  System.out.println("Error: " + e.message());
+		  }
+		  System.out.println("Main f");
+	  }
+  }
+
+#+end_src
+
+** Через интерфейс Runnable
+
+#+begin_src java :result output
+  public class Main {
+	  public static void main(String[] args) {
+		  MyThread thread = new Thread("New Thread");
+		  // Переопределение через лямбду функцию
+		  Runnable r=() -> {Код потока};
+		  new Thread(r).start();
+
+		  thread.start();
+	  }
+  }
+  class MyThread implements Runnable {
+	  void run() {				// Код который будет выполнятся в отдельном потоке
+		  System.out.println("Print on new thread");
+	  }
+  }
+#+end_src
+
+** Завершение или прерывание потока
+
+#+begin_src java :result output
+  public class Main {
+	  public static void main(String[] args) {
+		  MyThread thread = new MyThread("MyThread");
+		  thread.start();
+		  try {
+			  sleep(450);
+		  } catch (Exception e) {
+
+		  }
+	  }
+  }
+
+  class MyThread extends Thread {
+	  private boolean isActive = true;
+
+	  public void disable() {		// Метод для того чтобы остановить поток
+		  isActive = false;
+	  }
+
+	  @Override
+	  void run() {
+		  System.out.println(super.getNmae());
+		  int counter = 1;
+		  while(isActive) {
+			  System.out.println("Loop " + counter + 1);
+			  try {
+				  sleep(100);
+			  } catch (Exception e) {
+
+			  }
+		  }
+		  System.out.println(super.getName + "Finish");
+	  }
+  }
+#+end_src
+
+** IsInterrupted
+#+begin_src java :result output
+  public class Main {
+	  public static void main(String[] args) {
+		  MyThread thread = new MyThread("MyThread");
+		  thread.interrupt();
+		  try {
+			  sleep(450);
+		  } catch (Exception e) {
+			  
+		  }
+	  }
+  }
+
+  class MyThread extends Thread {
+	  private boolean isActive = true;
+
+	  public void disable() {		// Метод для того чтобы остановить поток
+		  isActive = false;
+	  }
+
+	  @Override
+	  void run() {
+		  System.out.println(super.getNmae());
+		  int counter = 1;
+		  while(!isInterrupted) {
+			  System.out.println("Loop " + counter + 1);
+			  try {
+				  sleep(100);
+			  } catch (Exception e) {
+				  break;
+				  return;
+			  }
+		  }
+		  System.out.println(super.getName + "Finish");
+	  }
+  }
+#+end_src
+
+** Синфронизация, блокировка, и взаимоблокировка потоков
+
+#+begin_src java :results output
+  public class Program {
+	  public static int commonRes=0;	  
+	  public static void main(String[] args) {
+		  for (int i = 0; i < 5; i++) {
+			  new MyTh("My Thread" + i).start();
+		  }
+	  }
+  }
+
+  class MyTh extends Thread {
+	  public MyTh(String name) {
+		  super.name = name;
+	  }
+
+	  @Override
+	  public void run() {
+		  
+		  commonRes = 1;
+		  for (int i = 0; i < 5; i++) {
+			  System.out.println(commonRes++);
+		  }
+	  }
+  }
+#+end_src
+
+  Для синхронизации есть специальный модификатор *synchronized*
+
+  public synchronized void meth() {
+  
+  }
